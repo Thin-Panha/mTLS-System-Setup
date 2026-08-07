@@ -1,0 +1,45 @@
+[Unit]
+Description=MPWT Enrollment API (Gunicorn)
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/mpwt/enrollment-api
+
+
+LoadCredentialEncrypted=secret_key:/etc/mpwt/creds/secret_key.cred
+LoadCredentialEncrypted=mpwt_api_key_enroll:/etc/mpwt/creds/mpwt_api_key_enroll.cred
+LoadCredentialEncrypted=policy_hmac_key:/etc/mpwt/creds/policy_hmac_key.cred
+LoadCredentialEncrypted=db_password:/etc/mpwt/creds/db_password.cred
+
+# ── PostgreSQL ─────────────────────────────────────────────────────────────────
+Environment="DB_HOST=127.0.0.1"
+Environment="DB_PORT=5432"
+Environment="DB_NAME=mpwt_db"
+Environment="DB_USER=mpwt_user"
+
+# ── Paths ──────────────────────────────────────────────────────────────────────
+Environment="PKI_BASE=/opt/mpwt/pki"
+Environment="LOG_PATH=/opt/mpwt/logs/enrollment-api.log"
+Environment="TOKEN_EXPIRY_HOURS=48"
+Environment="PYTHONPATH=/opt/mpwt/enrollment-api"
+
+Environment="HOME=/tmp"
+
+ExecStart=/opt/mpwt/enrollment-api/venv/bin/gunicorn \
+    --workers 2 \
+    --bind 127.0.0.1:5000 \
+    --timeout 60 \
+    --access-logfile - \
+    --error-logfile - \
+    app:app
+
+Restart=on-failure
+RestartSec=5
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

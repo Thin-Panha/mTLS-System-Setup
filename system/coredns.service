@@ -1,0 +1,16 @@
+[Unit]
+Description=CoreDNS
+After=network.target
+
+[Service]
+PermissionsStartOnly=true
+LimitNOFILE=1048576
+LimitNPROC=512
+NoNewPrivileges=true
+
+ExecStart=/usr/local/bin/coredns -conf /opt/mpwt/dns/Corefile
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

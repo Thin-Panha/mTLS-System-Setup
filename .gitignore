@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+**/.env
+pki/*/private/*
+pki/*/database/*
+pki/*/csr/*
+pki/*/certs/*
+logs/
+d.md
+README.md

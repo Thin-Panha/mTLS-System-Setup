@@ -1,0 +1,40 @@
+# /etc/nginx/sites-available/auth.mpwt.local
+
+server {
+    listen 443 ssl;                        # removed http2
+    server_name auth.mpwt.local ;
+
+    ssl_certificate     /etc/nginx/ssl/certs/auth.mpwt.local.crt;
+    ssl_certificate_key /etc/nginx/ssl/private/auth.mpwt.local.key;
+    ssl_verify_client   off;
+
+    # ssl_protocols, ssl_ciphers, ssl_prefer_server_ciphers
+    # inherited from nginx.conf global — do not redefine here
+
+    location /api/ {
+        proxy_pass         http://127.0.0.1:5000/api/;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto https;
+        proxy_read_timeout 30;
+    }
+
+    location /health {
+        proxy_pass http://127.0.0.1:5000/health;
+    }
+
+    location / {
+        return 444;                        # silent drop — reveal nothing
+    }
+
+    access_log /opt/mpwt/logs/auth-access.log;
+    error_log  /opt/mpwt/logs/auth-error.log warn;
+}
+
+# Port 80 — silent drop
+server {
+    listen 80;
+    server_name auth.mpwt.local enrollment.mpwt.local;
+    return 444;
+}

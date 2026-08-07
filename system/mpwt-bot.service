@@ -1,0 +1,28 @@
+[Unit]
+Description=MPWT Enrollment Bot
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+
+WorkingDirectory=/opt/mpwt/telegram-bot
+ExecStart=/opt/mpwt/telegram-bot/venv/bin/python mpwt_bot.py
+Restart=on-failure
+RestartSec=5
+
+# ── Required ───────────────────────────────────────────────────────────────────
+LoadCredentialEncrypted=telegram_token:/etc/mpwt/creds/telegram_token.cred
+LoadCredentialEncrypted=mpwt_api_key_bot:/etc/mpwt/creds/mpwt_api_key_bot.cred
+
+# ── Optional (shown with defaults) ────────────────────────────────────────────
+Environment="MPWT_API_BASE=https://auth.mpwt.local"
+Environment="MPWT_CA_CERT=/opt/mpwt/pki/issuing-ca/certs/ca-chain.crt"
+Environment="WHITELIST_PATH=/opt/mpwt/telegram-bot/whitelist.txt"
+Environment="STATE_PATH=/opt/mpwt/telegram-bot/state.json"
+Environment="RATE_WINDOW_SECONDS=60"
+Environment="RATE_MAX_ATTEMPTS=5"
+Environment="RATE_BLOCK_DURATION=3600"
+
+[Install]
+WantedBy=multi-user.target

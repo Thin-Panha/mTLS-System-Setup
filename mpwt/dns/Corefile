@@ -1,0 +1,17 @@
+mpwt.local {
+    hosts {
+        192.168.X.X auth.mpwt.local
+        fallthrough
+    }
+
+    log
+    errors
+    cache 30
+}
+
+. {
+    forward . 8.8.8.8 8.8.4.4
+    log
+    errors
+    cache 300
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+import sys
+sys.path.insert(0, "/usr/local/lib")
+from mpwt_admin.main import main
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,26 @@
+# /etc/nginx/sites-available/app.local.conf
+#
+# Example of a protected site. Copy this per app, change server_name /
+# cert paths / proxy_pass, and always keep the `include` line -- that's
+# what pulls in mTLS + auth_request enforcement from one shared source.
+
+server {
+    listen 443 ssl;
+    server_name app.local;
+
+    ssl_certificate     /etc/nginx/ssl/certs/app.local.crt;
+    ssl_certificate_key /etc/nginx/ssl/private/app.local.key;
+
+    include /etc/nginx/includes/mtls-auth.conf;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+    }
+}
+
+# Optional: redirect plain HTTP to HTTPS for the same host
+server {
+    listen 80;
+    server_name app.local;
+    return 301 https://$host$request_uri;
+}

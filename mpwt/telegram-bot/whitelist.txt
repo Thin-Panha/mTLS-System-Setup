@@ -1,0 +1,8 @@
+# MPWT Telegram Bot — Authorized Users Whitelist
+# Format: TELEGRAM_ID    EMPLOYEE_NAME
+# Add/remove users here — no restart needed
+
+1223880558	Thin Panha
+5003649569	Seat Sovann
+-7738563210	Nha
+

@@ -1,0 +1,68 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = /opt/mpwt/pki/issuing-ca
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/certs
+database          = $dir/database/index.txt
+serial            = $dir/database/serial
+RANDFILE          = $dir/private/.rand
+
+private_key       = $dir/private/issuing-ca.key
+certificate       = $dir/certs/issuing-ca.crt
+
+unique_subject    = no
+
+crlnumber         = $dir/database/crlnumber
+crl               = $dir/crl/issuing-ca.crl
+crl_extensions    = crl_ext
+default_crl_days  = 7
+
+default_md        = sha256
+name_opt          = ca_default
+cert_opt          = ca_default
+default_days      = 365
+preserve          = no
+policy            = policy_loose
+copy_extensions   = copy
+
+[ policy_loose ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+default_md          = sha256
+prompt              = no
+
+[ req_distinguished_name ]
+C   = KH
+O   = MPWT
+OU  = Infrastructure
+CN  = MPWT Issuing CA
+
+[ v3_client_cert ]
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage               = critical, digitalSignature
+extendedKeyUsage       = clientAuth
+
+[ v3_server_cert ]
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage               = critical, digitalSignature, keyEncipherment
+extendedKeyUsage       = serverAuth
+
+[ crl_ext ]
+authorityKeyIdentifier = keyid:always
