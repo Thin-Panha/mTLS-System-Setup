@@ -33,11 +33,6 @@ CREATE TABLE sites (
     active      BOOLEAN NOT NULL DEFAULT TRUE
 );
 
--- Seed default sites
-INSERT INTO sites (hostname, description) VALUES
-    ('dev.mpwt.local',   'Development Portal'),
-    ('wazuh.mpwt.local', 'SIEM / Wazuh Dashboard');
-
 -- ─────────────────────────────────────────
 -- DEVICES
 -- ─────────────────────────────────────────
