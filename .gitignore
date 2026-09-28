@@ -8,4 +8,5 @@ pki/*/csr/*
 pki/*/certs/*
 logs/
 d.md
+.gitignore
 README.md
